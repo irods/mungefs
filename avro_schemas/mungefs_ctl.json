@@ -1,0 +1,16 @@
+{
+    "name": "mungefs_ctl",
+    "type": "record",
+    "fields" : [
+        {"name": "operations", "type": { "type": "array", "items": "string"} },
+        {"name": "random", "type": "boolean"},
+        {"name": "err_no", "type": "int"},
+        {"name": "probability", "type": "long"},
+        {"name": "regexp", "type": "string"},
+        {"name": "kill_caller", "type": "boolean"},
+        {"name": "delay_us", "type": "long"},
+        {"name": "auto_delay", "type": "boolean"},
+        {"name": "corrupt_data", "type": "boolean"},
+        {"name": "corrupt_size", "type": "boolean"}
+    ]
+}
