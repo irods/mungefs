@@ -7,7 +7,7 @@ A FUSE file system overlay inspired by [Charybdefs](https://github.com/scylladb/
 ## mungefsctl
 
 A command line utility used to modify the behavior of the filesystem.
-
+```
 Usage:
 --help : show command usage
 --operations : list of operations to apply a fault
@@ -20,7 +20,7 @@ Usage:
 --auto_delay : set delay to simulate ssd
 --corrupt_data : corrupt read or write data
 --corrupt_size : report an invalid file size
-
+```
 ## Valid Operations:
     getattr
     readlink
