@@ -16,7 +16,7 @@ Usage:
 --probability : 0-100 probability of random error to inject
 --regexp : regexp matching operations
 --kill_caller : kill the calling process
---delay_us : delay a method by a given number of microsecods
+--delay_us : delay a method by a given number of microseconds
 --auto_delay : set delay to simulate ssd
 --corrupt_data : corrupt read or write data
 --corrupt_size : report an invalid file size
@@ -62,7 +62,7 @@ Usage:
 
 # Examples:
 
-## Corrupting  write operations:
+## Corrupting write operations:
 ```mungefsctl --operations "write" --corrupt_data```
 
 ## Corrupting read operations:
