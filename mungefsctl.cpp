@@ -145,7 +145,7 @@ int main(
             return err;
         }
 
-        print_ctl(ctl);
+        //print_ctl(ctl);
 
         auto out = avro::memoryOutputStream();
         auto enc = avro::binaryEncoder();
@@ -160,7 +160,7 @@ int main(
         data_t msg;
         bro.receive(msg);
         
-        std::cout << msg << std::endl;
+        //std::cout << msg << std::endl;
     }
     catch( const message_broker::exception& _e) {
         std::cerr << _e.what() << std::endl;
