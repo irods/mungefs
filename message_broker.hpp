@@ -41,6 +41,9 @@ public:
 
     typedef std::vector<uint8_t> data_type;
 
+    message_broker(const message_broker& _rhs) = delete;
+    message_broker& operator=(const message_broker& _rhs) = delete;
+
     message_broker(const std::string& _type, zmq::context_t* _zmq_ctx_ptr) :
         ctx_ptr_(_zmq_ctx_ptr), do_not_delete_ctx_ptr_(true) {
         try {
@@ -51,7 +54,7 @@ public:
         }
     }
 
-    message_broker(const std::string& _ctx) : 
+    explicit message_broker(const std::string& _ctx) :
         ctx_ptr_(new zmq::context_t(1)), do_not_delete_ctx_ptr_(false) {
         try {
             create_socket(_ctx);
@@ -187,7 +190,7 @@ public:
 
 
 private:
-    void create_socket(const std::string _ctx) {
+    void create_socket(const std::string& _ctx) {
         try {
             int time_out = 1500;
             if("ZMQ_REQ" == _ctx ) {
