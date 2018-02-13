@@ -407,6 +407,7 @@ void server_thread_executor() {
             if(msg.size() > 0) {
                 if(QUIT_MSG == msg) {
                     bro.send(ACK_MSG);
+                    exit_flg = true;
                     break;
                 } // if quit
 
