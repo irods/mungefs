@@ -60,8 +60,6 @@ static struct fuse_operations mungefs_oper = {
     .bmap        = mungefs_bmap,
     .ioctl       = mungefs_ioctl,
     .poll        = mungefs_poll,
-    .write_buf   = nullptr, // use basic write
-    .read_buf    = nullptr, // use basic read
     .flock       = mungefs_flock,
     .fallocate   = mungefs_fallocate,
 };

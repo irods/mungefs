@@ -64,10 +64,6 @@ int mungefs_ioctl(const char *, int cmd, void *arg,
                   struct fuse_file_info *, unsigned int flags, void *data);
 int mungefs_poll(const char *path, struct fuse_file_info *fi,
                  struct fuse_pollhandle *ph, unsigned *reventsp);
-int mungefs_write_buf(const char *, struct fuse_bufvec *buf, off_t off,
-                      struct fuse_file_info *);
-int mungefs_read_buf(const char *, struct fuse_bufvec **bufp,
-                     size_t size, off_t off, struct fuse_file_info *);
 int mungefs_flock(const char *, struct fuse_file_info *, int op);
 int mungefs_fallocate(const char *, int, off_t, off_t,
                       struct fuse_file_info *);
