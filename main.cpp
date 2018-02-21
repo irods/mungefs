@@ -16,6 +16,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <fuse.h>
 
 #include "mungefs_operations.hpp"
 

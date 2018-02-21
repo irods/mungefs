@@ -117,6 +117,11 @@ add_custom_command(
 )
 
 set_source_files_properties(
+  ${CMAKE_SOURCE_DIR}/mungefsctl.cpp
+  PROPERTIES
+  OBJECT_DEPENDS ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
+)
+set_source_files_properties(
   ${CMAKE_SOURCE_DIR}/mungefs_server.cpp
   PROPERTIES
   OBJECT_DEPENDS ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
