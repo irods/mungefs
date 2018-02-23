@@ -69,7 +69,7 @@ Usage:
 ```mungefsctl --operations "read" --corrupt_data```
 
 ## Corrupting the reporting of filesize:
-```mungefsctl --operations "getattr" --corrupt_data```
+```mungefsctl --operations "getattr" --corrupt_size```
 
 ## Resetting the operations:
 ```
