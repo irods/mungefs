@@ -191,21 +191,21 @@ add_executable(
 target_link_libraries(
   mungefsctl
   PRIVATE
-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_program_options.so
-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
+  ${AVRO_PATH}/lib/libavrocpp.so
+  ${BOOST_PATH}/lib/libboost_filesystem.so
+  ${BOOST_PATH}/lib/libboost_system.so
+  ${BOOST_PATH}/lib/libboost_program_options.so
+  ${ZMQ_PATH}/lib/libzmq.so
   ${FUSE_LIBRARIES}
   Threads::Threads
   )
 target_include_directories(
   mungefsctl
   PRIVATE
-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
-  ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
+  ${AVRO_PATH}/include
+  ${BOOST_PATH}/include
+  ${ZMQ_PATH}/include
+  ${CPPZMQ_PATH}/include
   ${CMAKE_BINARY_DIR}/include
   )
 
@@ -222,7 +222,7 @@ file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
 
 add_custom_command(
    OUTPUT ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
-   COMMAND ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   COMMAND LD_LIBRARY_PATH=${BOOST_PATH}/lib:${CLANG_LIBS} ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
    MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
 )
 
