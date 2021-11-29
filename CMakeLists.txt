@@ -45,7 +45,7 @@ set(MUNGEFS_COMPILE_DEFINITIONS ${MUNGEFS_PLATFORM_STRING} _LARGEFILE_SOURCE _FI
 
 if (NOT MUNGEFS_LINUX_DISTRIBUTION_NAME)
   execute_process(
-    COMMAND "python" "-c" "from __future__ import print_function; import platform; print(platform.linux_distribution()[0].split()[0].strip().lower(), end='')"
+    COMMAND "python2" "-c" "from __future__ import print_function; import platform; print(platform.linux_distribution()[0].split()[0].strip().lower(), end='')"
     RESULT_VARIABLE MUNGEFS_EXECUTE_PROCESS_RESULT_LINUX_DISTRIBUTION_NAME
     OUTPUT_VARIABLE MUNGEFS_LINUX_DISTRIBUTION_NAME
     )
@@ -58,7 +58,7 @@ endif()
 
 if (NOT MUNGEFS_LINUX_DISTRIBUTION_VERSION_MAJOR)
   execute_process(
-    COMMAND "python" "-c" "from __future__ import print_function; import platform; print(platform.linux_distribution()[1].strip().lower().split('.')[0], end='')"
+    COMMAND "python2" "-c" "from __future__ import print_function; import platform; print(platform.linux_distribution()[1].strip().lower().split('.')[0], end='')"
     RESULT_VARIABLE MUNGEFS_EXECUTE_PROCESS_RESULT_LINUX_DISTRIBUTION_VERSION_MAJOR
     OUTPUT_VARIABLE MUNGEFS_LINUX_DISTRIBUTION_VERSION_MAJOR
     )
@@ -92,7 +92,7 @@ if (NOT CPACK_GENERATOR)
   elseif(MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "ubuntu" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "debian")
     set(CPACK_GENERATOR DEB CACHE STRING "CPack generator to use, e.g. {DEB, RPM, TGZ}." FORCE)
     message(STATUS "Setting unspecified CPACK_GENERATOR to ${CPACK_GENERATOR}. This is the correct setting for normal builds.")
-  elseif(MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "centos" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "opensuse" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "fedora")
+  elseif(MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "centos" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "opensuse" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "fedora" OR MUNGEFS_LINUX_DISTRIBUTION_NAME STREQUAL "almalinux")
     set(CPACK_GENERATOR RPM CACHE STRING "CPack generator to use, e.g. {DEB, RPM, TGZ}." FORCE)
     message(STATUS "Setting unspecified CPACK_GENERATOR to ${CPACK_GENERATOR}. This is the correct setting for normal builds.")
   else()
