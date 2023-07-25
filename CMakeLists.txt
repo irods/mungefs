@@ -134,8 +134,7 @@ if (NOT CPACK_PACKAGING_INSTALL_PREFIX)
   message(STATUS "Setting unspecified CPACK_PACKAGING_INSTALL_PREFIX to '${CPACK_PACKAGING_INSTALL_PREFIX}'. This is the correct setting for normal builds.")
 endif()
 
-add_compile_options(-nostdinc++ -Wall -Werror)
-include_directories(${IRODS_EXTERNALS_FULLPATH_CLANG}/include/c++/v1)
+add_compile_options(-Wall -Werror)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
