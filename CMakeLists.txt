@@ -25,9 +25,7 @@ endmacro()
 
 CHECK_DEPENDENCY_SET_FULLPATH(CLANG clang13.0.0-0)
 CHECK_DEPENDENCY_SET_FULLPATH(CPPZMQ cppzmq4.8.1-1)
-CHECK_DEPENDENCY_SET_FULLPATH(ARCHIVE libarchive3.5.2-0)
 CHECK_DEPENDENCY_SET_FULLPATH(AVRO avro1.11.0-2)
-CHECK_DEPENDENCY_SET_FULLPATH(BOOST boost1.81.0-0)
 CHECK_DEPENDENCY_SET_FULLPATH(CLANG_RUNTIME clang-runtime13.0.0-0)
 CHECK_DEPENDENCY_SET_FULLPATH(ZMQ zeromq4-14.1.8-0)
 
@@ -48,6 +46,10 @@ add_compile_options(-Wall -Werror)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
+find_package(Boost REQUIRED
+  COMPONENTS system filesystem program_options)
+find_package(LibArchive REQUIRED)
+
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(FUSE 2.6 REQUIRED)
 
@@ -62,18 +64,17 @@ target_link_libraries(
   mungefs
   PRIVATE
   ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_filesystem.so
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/lib/libboost_system.so
-  ${IRODS_EXTERNALS_FULLPATH_ARCHIVE}/lib/libarchive.so
   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
   ${FUSE_LIBRARIES}
+  Boost::system
+  Boost::filesystem
+  LibArchive::LibArchive
   Threads::Threads
   )
 target_include_directories(
   mungefs
   PRIVATE
   ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
-  ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
   ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
   ${CMAKE_CURRENT_BINARY_DIR}/include
@@ -93,18 +94,17 @@ target_link_libraries(
   mungefsctl
   PRIVATE
   ${AVRO_PATH}/lib/libavrocpp.so
-  ${BOOST_PATH}/lib/libboost_filesystem.so
-  ${BOOST_PATH}/lib/libboost_system.so
-  ${BOOST_PATH}/lib/libboost_program_options.so
   ${ZMQ_PATH}/lib/libzmq.so
   ${FUSE_LIBRARIES}
+  Boost::system
+  Boost::filesystem
+  Boost::program_options
   Threads::Threads
   )
 target_include_directories(
   mungefsctl
   PRIVATE
   ${AVRO_PATH}/include
-  ${BOOST_PATH}/include
   ${ZMQ_PATH}/include
   ${CPPZMQ_PATH}/include
   ${CMAKE_CURRENT_BINARY_DIR}/include
@@ -123,7 +123,7 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_custom_command(
    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
-   COMMAND LD_LIBRARY_PATH=${BOOST_PATH}/lib:${CLANG_LIBS} ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   COMMAND LD_LIBRARY_PATH=${CLANG_LIBS} ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
 )
 
