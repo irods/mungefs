@@ -1,31 +1,13 @@
 cmake_minimum_required(VERSION 3.5.0 FATAL_ERROR) #CPACK_DEBIAN_<COMPONENT>_PACKAGE_NAME
 
+list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 set(MUNGEFS_VERSION_MAJOR "1")
 set(MUNGEFS_VERSION_MINOR "0")
 set(MUNGEFS_VERSION_PATCH "6")
 set(MUNGEFS_VERSION "${MUNGEFS_VERSION_MAJOR}.${MUNGEFS_VERSION_MINOR}.${MUNGEFS_VERSION_PATCH}")
 
 set(MUNGEFS_CXX_STANDARD 14)
-
-if (NOT IRODS_EXTERNALS_PACKAGE_ROOT)
-    set(IRODS_EXTERNALS_PACKAGE_ROOT "/opt/irods-externals" CACHE STRING "Choose the location of iRODS external packages." FORCE)
-    message(STATUS "Setting unspecified IRODS_EXTERNALS_PACKAGE_ROOT to '${IRODS_EXTERNALS_PACKAGE_ROOT}'. This is the correct setting for normal builds.")
-endif()
-
-macro(CHECK_DEPENDENCY_SET_FULLPATH DEPENDENCY_NAME DEPENDENCY_SUBDIRECTORY)
-    if (IS_DIRECTORY ${IRODS_EXTERNALS_FULLPATH_${DEPENDENCY_NAME}})
-        message(STATUS "Using user-specified value for IRODS_EXTERNALS_FULLPATH_${DEPENDENCY_NAME}: ${IRODS_EXTERNALS_FULLPATH_${DEPENDENCY_NAME}}")
-    else()
-        if (NOT IS_DIRECTORY ${IRODS_EXTERNALS_PACKAGE_ROOT}/${DEPENDENCY_SUBDIRECTORY})
-            message(FATAL_ERROR "${DEPENDENCY_NAME} not found at ${IRODS_EXTERNALS_PACKAGE_ROOT}/${DEPENDENCY_SUBDIRECTORY}")
-        endif()
-        set(IRODS_EXTERNALS_FULLPATH_${DEPENDENCY_NAME} ${IRODS_EXTERNALS_PACKAGE_ROOT}/${DEPENDENCY_SUBDIRECTORY})
-    endif()
-endmacro()
-
-CHECK_DEPENDENCY_SET_FULLPATH(CPPZMQ cppzmq4.8.1-1)
-CHECK_DEPENDENCY_SET_FULLPATH(AVRO avro1.11.0-2)
-CHECK_DEPENDENCY_SET_FULLPATH(ZMQ zeromq4-14.1.8-0)
 
 project(mungefs
   VERSION "${MUNGEFS_VERSION}"
@@ -46,10 +28,11 @@ find_package(Threads REQUIRED)
 
 find_package(Boost REQUIRED
   COMPONENTS system filesystem program_options)
-find_package(LibArchive REQUIRED)
 
-list(INSERT CMAKE_MODULE_PATH 0 "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+find_package(LibArchive REQUIRED)
 find_package(FUSE 2.6 REQUIRED)
+find_package(AvroCpp REQUIRED)
+find_package(cppzmq REQUIRED)
 
 add_executable(
   mungefs
@@ -61,9 +44,9 @@ add_executable(
 target_link_libraries(
   mungefs
   PRIVATE
-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/lib/libavrocpp.so
-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/lib/libzmq.so
   ${FUSE_LIBRARIES}
+  cppzmq::cppzmq
+  Avro::AvroCpp
   Boost::system
   Boost::filesystem
   LibArchive::LibArchive
@@ -72,9 +55,6 @@ target_link_libraries(
 target_include_directories(
   mungefs
   PRIVATE
-  ${IRODS_EXTERNALS_FULLPATH_AVRO}/include
-  ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
-  ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
   ${CMAKE_CURRENT_BINARY_DIR}/include
   ${FUSE_INCLUDE_DIRS}
   )
@@ -91,9 +71,9 @@ add_executable(
 target_link_libraries(
   mungefsctl
   PRIVATE
-  ${AVRO_PATH}/lib/libavrocpp.so
-  ${ZMQ_PATH}/lib/libzmq.so
   ${FUSE_LIBRARIES}
+  cppzmq::cppzmq
+  Avro::AvroCpp
   Boost::system
   Boost::filesystem
   Boost::program_options
@@ -102,9 +82,6 @@ target_link_libraries(
 target_include_directories(
   mungefsctl
   PRIVATE
-  ${AVRO_PATH}/include
-  ${ZMQ_PATH}/include
-  ${CPPZMQ_PATH}/include
   ${CMAKE_CURRENT_BINARY_DIR}/include
   )
 
@@ -121,7 +98,7 @@ file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_custom_command(
    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
-   COMMAND ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   COMMAND ${AVROCPP_AVROGEN_EXECUTABLE} -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
    MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
 )
 
