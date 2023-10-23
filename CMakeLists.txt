@@ -48,14 +48,14 @@ add_compile_options(-Wall -Werror)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 find_package(FUSE 2.6 REQUIRED)
 
 add_executable(
   mungefs
-  ${CMAKE_SOURCE_DIR}/mungefs_server.cpp
-  ${CMAKE_SOURCE_DIR}/mungefs_operations.cpp
-  ${CMAKE_SOURCE_DIR}/main.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_operations.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
   )
 
 target_link_libraries(
@@ -76,7 +76,7 @@ target_include_directories(
   ${IRODS_EXTERNALS_FULLPATH_BOOST}/include
   ${IRODS_EXTERNALS_FULLPATH_ZMQ}/include
   ${IRODS_EXTERNALS_FULLPATH_CPPZMQ}/include
-  ${CMAKE_BINARY_DIR}/include
+  ${CMAKE_CURRENT_BINARY_DIR}/include
   ${FUSE_INCLUDE_DIRS}
   )
 
@@ -86,7 +86,7 @@ set_property(TARGET mungefs PROPERTY CXX_STANDARD ${MUNGEFS_CXX_STANDARD})
 
 add_executable(
   mungefsctl
-  ${CMAKE_SOURCE_DIR}/mungefsctl.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/mungefsctl.cpp
   )
 
 target_link_libraries(
@@ -107,7 +107,7 @@ target_include_directories(
   ${BOOST_PATH}/include
   ${ZMQ_PATH}/include
   ${CPPZMQ_PATH}/include
-  ${CMAKE_BINARY_DIR}/include
+  ${CMAKE_CURRENT_BINARY_DIR}/include
   )
 
 target_compile_definitions(mungefsctl PRIVATE ${MUNGEFS_COMPILE_DEFINITIONS})
@@ -119,23 +119,23 @@ set (
     mungefs_ctl
     )
 
-file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/include)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 add_custom_command(
-   OUTPUT ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
-   COMMAND LD_LIBRARY_PATH=${BOOST_PATH}/lib:${CLANG_LIBS} ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
-   MAIN_DEPENDENCY ${CMAKE_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
+   COMMAND LD_LIBRARY_PATH=${BOOST_PATH}/lib:${CLANG_LIBS} ${IRODS_EXTERNALS_FULLPATH_AVRO}/bin/avrogencpp -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
 )
 
 set_source_files_properties(
-  ${CMAKE_SOURCE_DIR}/mungefsctl.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/mungefsctl.cpp
   PROPERTIES
-  OBJECT_DEPENDS ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
+  OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
 )
 set_source_files_properties(
-  ${CMAKE_SOURCE_DIR}/mungefs_server.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp
   PROPERTIES
-  OBJECT_DEPENDS ${CMAKE_BINARY_DIR}/include/${AVRO_FILE}.hpp
+  OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
 )
 
 install(
