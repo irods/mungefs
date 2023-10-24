@@ -119,10 +119,12 @@ set_source_files_properties(
   OBJECT_DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp"
 )
 
+include(GNUInstallDirs)
+
 install(
   TARGETS
   mungefs
   mungefsctl
   RUNTIME
-  DESTINATION usr/bin
+  DESTINATION "${CMAKE_INSTALL_BINDIR}"
   )
