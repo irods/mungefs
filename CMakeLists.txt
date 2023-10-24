@@ -42,9 +42,9 @@ find_package(cppzmq REQUIRED)
 
 add_executable(
   mungefs
-  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_operations.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+  "${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/mungefs_operations.cpp"
+  "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
   )
 
 target_link_libraries(
@@ -61,7 +61,7 @@ target_link_libraries(
 target_include_directories(
   mungefs
   PRIVATE
-  ${CMAKE_CURRENT_BINARY_DIR}/include
+  "${CMAKE_CURRENT_BINARY_DIR}/include"
   ${FUSE_INCLUDE_DIRS}
   )
 
@@ -100,23 +100,23 @@ set (
     mungefs_ctl
     )
 
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include)
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/include")
 
 add_custom_command(
-   OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
-   COMMAND ${AVROCPP_AVROGEN_EXECUTABLE} -o ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp -i ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
-   MAIN_DEPENDENCY ${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json
+   OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp"
+   COMMAND "${AVROCPP_AVROGEN_EXECUTABLE}" -o "${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp" -i "${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json"
+   MAIN_DEPENDENCY "${CMAKE_CURRENT_SOURCE_DIR}/avro_schemas/${AVRO_FILE}.json"
 )
 
 set_source_files_properties(
-  ${CMAKE_CURRENT_SOURCE_DIR}/mungefsctl.cpp
+  "${CMAKE_CURRENT_SOURCE_DIR}/mungefsctl.cpp"
   PROPERTIES
-  OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
+  OBJECT_DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp"
 )
 set_source_files_properties(
-  ${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp
+  "${CMAKE_CURRENT_SOURCE_DIR}/mungefs_server.cpp"
   PROPERTIES
-  OBJECT_DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp
+  OBJECT_DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/include/${AVRO_FILE}.hpp"
 )
 
 install(
