@@ -21,7 +21,13 @@ if (NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   message(STATUS "Setting unspecified CMAKE_BUILD_TYPE to '${CMAKE_BUILD_TYPE}'. This is the correct setting for normal builds.")
 endif()
 
-add_compile_options(-Wall -Werror)
+add_compile_options(-Wall)
+
+set(MUNGEFS_BUILD_WITH_WERROR FALSE CACHE BOOL "Choose whether to compile with -Werror.")
+
+if (MUNGEFS_BUILD_WITH_WERROR)
+  add_compile_options(-Werror)
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
